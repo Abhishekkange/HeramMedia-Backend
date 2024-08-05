@@ -1,5 +1,12 @@
 const mongoose = require('mongoose');
 
+// Define the schema for user interactions
+const userInteractionSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'UserProfile', required: true },
+  action: { type: String, enum: ['swipeLeft', 'swipeRight'], required: true },
+  timestamp: { type: Date, default: Date.now }
+});
+
 const userProfileSchema = new mongoose.Schema({
 
     //Basic Requirenments
@@ -28,6 +35,9 @@ const userProfileSchema = new mongoose.Schema({
   },
   languagesSpoken: [String],
   religionAndBeliefs: { type: String },
+  genderSpecifcation: { type: String },
+  userFeed: [{ type: Schema.Types.ObjectId, ref: 'UserProfile' }],
+  userFeedHistory: [userInteractionSchema]
   
 //   verification: {
 //     email: { type: String },
@@ -40,3 +50,5 @@ const userProfileSchema = new mongoose.Schema({
 //   },
   
 });
+const usermodel = new mongoose.model('userprofile',userProfileSchema);
+module.exports = usermodel;

@@ -7,7 +7,8 @@ connectToMongoose();
 
 app.use(bodyparser.json());
 
-app.use('/api/v1',require('./apis/v1/Routers/profile-routes'))
+app.use('/api/v1',require('./apis/v1/Routers/profile-routes'));
+app.use('/api/v1',require('./apis/v1/Routers/feed-route'));
 
 
 
