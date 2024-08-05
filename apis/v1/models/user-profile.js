@@ -20,5 +20,23 @@ const userProfileSchema = new mongoose.Schema({
         instagram: { type: String },
         spotify: { type: String },
       },
+      height: { type: Number },
+  lifestyleChoices: {
+    smoking: { type: Boolean },
+    drinking: { type: Boolean },
+    diet: { type: String },
+  },
+  languagesSpoken: [String],
+  religionAndBeliefs: { type: String },
   
-})
+//   verification: {
+//     email: { type: String },
+//     phone: { type: String },
+//     isVerified: { type: Boolean, default: false },
+//   },
+//   activityStatus: {
+//     isOnline: { type: Boolean, default: false },
+//     lastActive: { type: Date },
+//   },
+  
+});
