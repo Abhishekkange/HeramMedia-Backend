@@ -10,6 +10,7 @@ const userInteractionSchema = new Schema({
 const userProfileSchema = new mongoose.Schema({
 
     //Basic Requirenments
+    userId:{type:mongoose.Schema.Types.ObjectId,ref:'user'},
     name: { type: String },
     age: { type: Number },
     gender: { type: String },
