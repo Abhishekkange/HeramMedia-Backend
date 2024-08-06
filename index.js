@@ -12,9 +12,4 @@ app.use('/api/v1',require('./apis/v1/Routers/auth-route'));
 app.use('/api/v1',require('./apis/v1/Routers/match-routes'));
 app.use('/api/v1',require('./apis/v1/Routers/swipe-route'));
 
-
-
-app.listen(PORT,()=>{
-
-  console.log('listening on port '+PORT);
-})
+app.listen(PORT,()=>{console.log('listening on port '+PORT)});
