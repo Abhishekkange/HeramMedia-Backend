@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 // Define the schema for user interactions
-const userInteractionSchema = new Schema({
-  userId: { type: Schema.Types.ObjectId, ref: 'UserProfile', required: true },
+const userInteractionSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true },
   action: { type: String, enum: ['swipeLeft', 'swipeRight'], required: true },
   timestamp: { type: Date, default: Date.now }
 });
@@ -37,7 +37,7 @@ const userProfileSchema = new mongoose.Schema({
   languagesSpoken: [String],
   religionAndBeliefs: { type: String },
   genderSpecifcation: { type: String },
-  userFeed: [{ type: Schema.Types.ObjectId, ref: 'UserProfile' }],
+  userFeed: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile' }],
   userFeedHistory: [userInteractionSchema]
   
 //   verification: {

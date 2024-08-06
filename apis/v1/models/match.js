@@ -1,6 +1,8 @@
-const matchSchema = new Schema({
-    user1: { type: Schema.Types.ObjectId, ref: 'UserProfile', required: true },
-    user2: { type: Schema.Types.ObjectId, ref: 'UserProfile', required: true },
+const mongoose = require('mongoose');
+
+const matchSchema = new mongoose.Schema({
+    user1: { type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true },
+    user2: { type: mongoose.Schema.Types.ObjectId, ref: 'UserProfile', required: true },
     timestamp: { type: Date, default: Date.now },
   });
   

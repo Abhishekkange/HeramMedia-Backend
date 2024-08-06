@@ -1,3 +1,5 @@
+const UserProfile = require('../models/user-profile');
+
 const calculateSimilarityScore=(user, profile)=>{
 
     let score = 0;
@@ -34,14 +36,16 @@ const calculateSimilarityScore=(user, profile)=>{
     
         const minAge = user.age - 3;
         const maxAge = user.age;
-        const preferredGender = user.genderSpecifcation;
+        const preferredGender = "female";
     
         // Find profiles that match the criteria
         const matchingProfiles = await UserProfile.find({
-          _id: { $ne: userId },
+          _id: { $ne: user._id },
           gender: preferredGender,
           age: { $gte: minAge, $lte: maxAge }
         });
+        console.log("matching profiles are ");
+        console.log(matchingProfiles);
   
         return matchingProfiles;
 
@@ -55,7 +59,7 @@ const calculateSimilarityScore=(user, profile)=>{
       if(preferredProfiles.length > 0)
       {
         //filter the profile here
-        similiarProfiles= matchingProfiles.map(profile => {
+        similiarProfiles= preferredProfiles.map(profile => {
           const similarityScore = calculateSimilarityScore(user, profile);
           return { profile, similarityScore };
         });
@@ -69,6 +73,7 @@ const calculateSimilarityScore=(user, profile)=>{
           }
         });
   
+        console.log("0");
         return mostSimiliarProfiles;
       }
   
