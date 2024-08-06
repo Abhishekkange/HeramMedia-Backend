@@ -1,6 +1,6 @@
 const swipeSchema = new Schema({
-    swiper: { type: Schema.Types.ObjectId, ref: 'UserProfile', required: true },
-    swiped: { type: Schema.Types.ObjectId, ref: 'UserProfile', required: true },
+    swiper: { type: Schema.Types.ObjectId, ref: 'userprofile', required: true },
+    swiped: { type: Schema.Types.ObjectId, ref: 'userprofile', required: true },
     isRightSwipe: { type: Boolean, required: true },
     timestamp: { type: Date, default: Date.now },
   });
