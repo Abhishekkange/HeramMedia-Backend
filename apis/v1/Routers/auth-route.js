@@ -8,7 +8,7 @@ router.post('/login',async(req,res)=>{
     const email = req.body.email;
     const token = req.body.token;
 
-    const user = User.findOne({
+    const user = await User.findOne({
 
         email:email
     });
@@ -27,7 +27,7 @@ router.post('/login',async(req,res)=>{
     }
     else{
         //create new user 
-        const user = new user ({
+        const user = new User ({
 
             email:email,
             token:token
@@ -37,7 +37,7 @@ router.post('/login',async(req,res)=>{
         //send JWT of saved user
         const jwt = createJWT(savedUser._id,"shahrukhKhan");
         res.json({"message":jwt,type:"signedup"});
-        
+
     }
 
 });
