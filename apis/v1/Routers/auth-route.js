@@ -18,11 +18,11 @@ router.post('/login',async(req,res)=>{
         {
             //user loginned send JWT token
             const jwt = createJWT(user._id,"shahrukhKhan");
-            res.json({"message":jwt});
+            res.json({"message":jwt,type:"login"});
         }
         else {
             //login failed
-            res.json({"message": "Login failed"});
+            res.json({"message": "Login failed",type:"error"});
         }
     }
     else{
@@ -36,7 +36,8 @@ router.post('/login',async(req,res)=>{
         const savedUser = await user.save();
         //send JWT of saved user
         const jwt = createJWT(savedUser._id,"shahrukhKhan");
-        res.json({"message":jwt});
+        res.json({"message":jwt,type:"signedup"});
+        
     }
 
 });
