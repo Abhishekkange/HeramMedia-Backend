@@ -31,7 +31,10 @@ Router.post('/feed', async (req, res) => {
     const userId = await verifyJwt(jwtToken);
 
     // Find current user profile
+   // console.log(userId);
     const userProfile = await UserProfile.findOne({ userId: userId });
+    console.log(userProfile);
+    console.log(userProfile._id.toString());
     
 
     // Find all other profiles excluding the current user
@@ -76,7 +79,7 @@ Router.post('/feed', async (req, res) => {
     //   { userId: userId },
     //   { $push: { userFeedHistory: sortedPair } },
     //   { new: true }
-    // );
+    //);
     
     // Send the selected profile pair to the user
     res.json(uniquePairs[randomInt]);
