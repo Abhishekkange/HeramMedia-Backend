@@ -29,6 +29,7 @@ Router.get('/feed/:jwt', async (req, res) => {
   try {
     const jwtToken = req.params.jwt;
     const userId = await verifyJwt(jwtToken);
+    //redpliy
 
     // Find current user profile
    // console.log(userId);
