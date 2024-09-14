@@ -25,9 +25,9 @@ const generateUniquePairs = (profiles) => {
 };
 
 // Feed route
-Router.post('/feed', async (req, res) => {
+Router.get('/feed/:jwt', async (req, res) => {
   try {
-    const jwtToken = req.body.jwt;
+    const jwtToken = req.params.jwt;
     const userId = await verifyJwt(jwtToken);
 
     // Find current user profile
