@@ -81,9 +81,9 @@ Router.get('/feed', async (req, res) => {
     //   { $push: { userFeedHistory: sortedPair } },
     //   { new: true }
     //);
-    
+  
     // Send the selected profile pair to the user
-    res.json(uniquePairs[randomInt]);
+    res.json({"message":uniquePairs[randomInt]});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
