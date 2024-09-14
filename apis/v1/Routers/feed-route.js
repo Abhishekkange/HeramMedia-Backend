@@ -25,11 +25,11 @@ const generateUniquePairs = (profiles) => {
 };
 
 // Feed route
-Router.get('/feed/:jwt', async (req, res) => {
+Router.get('/feed', async (req, res) => {
   try {
-    const jwtToken = req.params.jwt;
+    const jwtToken = req.body.jwt;
     const userId = await verifyJwt(jwtToken);
-    //redpliy
+    
 
     // Find current user profile
    // console.log(userId);
