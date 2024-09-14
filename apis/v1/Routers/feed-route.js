@@ -1,93 +1,90 @@
 const express = require('express');
 const Router = express.Router();
 const UserProfile = require('../models/user-profile');
-const {calculateSimilarityScore,preferredUsers,generateFeed} = require('../utilities/feedHandler');
+const jwt = require('jsonwebtoken');
 
-  //functions 
-  async function updateUserFeed(userId, updateData) {
-    try {
-      if (!updateData || !Array.isArray(updateData)) {
-        throw new Error('Invalid update data. It must be an array of user profile IDs.');
-      }
-  
-      const updatedUser = await UserProfile.findByIdAndUpdate(
-        userId,
-        { $push: { userFeed: { $each: updateData.map(id => mongoose.Types.ObjectId(id)) } } },
-        { new: true } // Return the updated document
-      );
-  
-      console.log('User updated:', updatedUser);
-    } catch (error) {
-      console.error('Error updating user profile:', error);
+// Helper function to verify JWT token
+const verifyJwt = async (token) => {
+  const data = jwt.verify(token, 'shahrukhKhan');  // Replace with your secret
+  return data.userId;
+};
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Function to generate unique profile pairs (without reverse pairs like (B, A))
+const generateUniquePairs = (profiles) => {
+  let pairs = [];
+  for (let i = 0; i < profiles.length; i++) {
+    for (let j = i + 1; j < profiles.length; j++) {
+      pairs.push([profiles[i], profiles[j]]);  // Only (i, j), no (j, i)
     }
   }
-  
-  async function fetchAndRemoveFirst20ItemsFromUserFeed(userId) {
-    try {
-      // Find the user profile by ID
-      const user = await UserProfile.findById(userId);
-      if (!user) {
-        console.log('User not found');
-        return;
-      }
-  
-      // Fetch the first 20 items from the userFeed
-      const first20Items = user.userFeed.slice(0, 20);
-  
-      // Remove the first 20 items from the userFeed
-      user.userFeed = user.userFeed.slice(20);
-  
-      // Save the updated user profile back to the database
-      await user.save();
-  
-      console.log('First 20 items fetched and removed from userFeed:', first20Items);
-      return first20Items;
-    } catch (error) {
-      console.error('Error fetching and removing items from userFeed:', error);
+  return pairs;
+};
+
+// Feed route
+Router.post('/feed', async (req, res) => {
+  try {
+    const jwtToken = req.body.jwt;
+    const userId = await verifyJwt(jwtToken);
+
+    // Find current user profile
+    const userProfile = await UserProfile.findOne({ userId: userId });
+    
+
+    // Find all other profiles excluding the current user
+    const allProfiles = await UserProfile.find({
+      _id: { $ne: userProfile._id.toString() }
+    });
+
+    if (allProfiles.length < 2) {
+      return res.status(400).json({ message: "Not enough profiles to generate pairs." });
     }
+
+    // Generate all unique pairs
+    const uniquePairs = generateUniquePairs(allProfiles);
+
+    const randomInt = getRandomInt(0, uniquePairs.length);
+
+    // Retrieve user's feed history or initialize it if undefined
+    // const shownPairs = userProfile.userFeedHistory || [];
+
+    // Create a set of shown pairs
+    // const shownPairSet = new Set(shownPairs.map(pair => pair.map(id => id.toString()).sort().join(',')));
+
+    // Filter out pairs that have already been shown, considering both (A, B) and (B, A)
+    // const availablePairs = uniquePairs.filter(pair => {
+    //   const pairIds = pair.map(p => p._id.toString()).sort().join(',');
+    //   return !shownPairSet.has(pairIds);
+    // });
+
+    // If no available pairs remain, return an error
+    // if (availablePairs.length === 0) {
+    //   return res.status(400).json({ message: "No more profile pairs to show." });
+    // }
+
+    // Select the first available pair to show
+    // const profilePair = availablePairs[0];
+
+    // Prepare sorted pair for consistent tracking (sorted by ObjectId)
+    // const sortedPair = profilePair.map(p => p._id.toString()).sort(); // Ensure (A, B) and (B, A) are consistent
+
+    // Add the new pair to the user's feed history
+    // await UserProfile.findOneAndUpdate(
+    //   { userId: userId },
+    //   { $push: { userFeedHistory: sortedPair } },
+    //   { new: true }
+    // );
+    
+    // Send the selected profile pair to the user
+    res.json(uniquePairs[randomInt]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
+});
 
-  Router.post('/feed',async(req,res)=>{
-
-
-    const userId = req.body.userId;
-    console.log(userId);
-    try{
-
-      const user = await UserProfile.findById(userId);
-      //check if userFeed is empty
-      const userFeed = user.userFeed;
-
-      if(userFeed.length == 0)
-      {
-        const similiarProfiles = await generateFeed(user);
-        res.json({"message":similiarProfiles});
-
-      }
-      else {
-
-        if(userFeed.length>20)
-        {
-          //send feed directly
-          const feed = await fetchAndRemoveFirst20ItemsFromUserFeed(userId);
-          res.send({"message":feed});
-
-        }
-        else{
-          //send feed and generate new feed as well
-          const feed = await fetchAndRemoveFirst20ItemsFromUserFeed(userId);
-          res.send(feed);
-          generateFeed(userId);
-        
-        }
-      }
-
-    }catch(e){
-
-      console.log("User not found"+e);
-    }
-
-  });
- 
 
 module.exports = Router;
