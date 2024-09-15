@@ -25,7 +25,7 @@ const generateUniquePairs = (profiles) => {
 };
 
 // Feed route
-Router.get('/feed', async (req, res) => {
+Router.post('/feed', async (req, res) => {
   try {
     // const jwtToken = req.body.jwt;
     const jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmQxM2FkYmMxMTYxM2IwM2Y1MGNlYmEiLCJpYXQiOjE3MjYzMjIxMzd9.nbOdNJJ32OJDmMWhePQlqsq7aZ5mkRl80-q2nOEzuG0";
