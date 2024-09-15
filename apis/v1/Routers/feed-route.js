@@ -84,7 +84,7 @@ Router.post('/feed', async (req, res) => {
     //);
   
     // Send the selected profile pair to the user
-    res.json({"message":uniquePairs[randomInt]});
+    res.json({"message":uniquePairs});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
