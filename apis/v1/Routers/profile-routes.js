@@ -17,7 +17,7 @@ router.post('/profile', async (req, res) => {
         const {name,age,gender,profilePicture,bio,occupation,education,interests,socialMediaLinks,height,lifestyleChoices,languagesSpoken,religionAndBeliefs} = req.body;
         const newUser = new User({ name, age, gender, profilePicture, bio, occupation, education, interests, socialMediaLinks, height, lifestyleChoices, languagesSpoken, religionAndBeliefs });
         const savedUser = await newUser.save();
-        res.json({"message": savedUser});
+        res.json({"message": "profile created"});
 
     } catch (e) {
 
@@ -65,7 +65,6 @@ router.get('/profile/:id', async (req, res) => {
       if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
       }
-  
       // Convert buffer to base64 string
       const fileStr = req.file.buffer.toString('base64');
   
