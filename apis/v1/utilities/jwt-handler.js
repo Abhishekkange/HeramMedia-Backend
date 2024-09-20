@@ -7,7 +7,10 @@ const createJWT = (userId,key)=>{
     return jwttoken;
 }
 
-const verifyJwt =()=>{
+const verifyJwt =(token)=>{
+
+    const data = JWT.verify(token, 'shahrukhKhan');
+    return data.userId;  // Replace with your secret
 
 
 

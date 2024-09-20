@@ -3,19 +3,30 @@ const router = express.Router();
 const { uploadImage } = require('../utilities/uploadhandler');
 const User = require('../models//user-profile');
 const multer = require('multer');
-
+const mongoose = require('mongoose');
+const {createJWT,verifyJwt} = require('../utilities/jwt-handler');
 
 // Configure multer for file upload
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+router.post('/getId',(req,res)=>{
+
+  const jwt = req.body.jwt;
+  const data = verifyJwt(jwt);
+  res.json({"message":data});
+
+
+})
 
 //create a new profile
 router.post('/profile', async (req, res) => {
 
     try {
 
-        const {name,age,gender,profilePicture,bio,occupation,education,interests,socialMediaLinks,height,lifestyleChoices,languagesSpoken,religionAndBeliefs} = req.body;
-        const newUser = new User({ name, age, gender, profilePicture, bio, occupation, education, interests, socialMediaLinks, height, lifestyleChoices, languagesSpoken, religionAndBeliefs });
+        const {name,age,gender,profilePicture,bio,occupation,education,interests,socialMediaLinks,height,lifestyleChoices,languagesSpoken,religionAndBeliefs,userId} = req.body;
+        const userIdObjectId = new mongoose.Types.ObjectId(userId);
+        const newUser = new User({ userIdObjectId,name, age, gender, profilePicture, bio, occupation, education, interests, socialMediaLinks, height, lifestyleChoices, languagesSpoken, religionAndBeliefs });
         const savedUser = await newUser.save();
         res.json({"message": "profile created"});
 
