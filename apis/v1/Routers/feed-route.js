@@ -25,40 +25,39 @@ const generateUniquePairs = (profiles) => {
   return pairs;
 };
 
-// Function to shuffle an array using lodash's shuffle function
-function shuffleArray(array) {
-  return _.shuffle(array);
-}
-
+// Feed route
 Router.post('/feed', async (req, res) => {
   try {
     // const jwtToken = req.body.jwt;
     const jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmQxM2FkYmMxMTYxM2IwM2Y1MGNlYmEiLCJpYXQiOjE3MjYzMjIxMzd9.nbOdNJJ32OJDmMWhePQlqsq7aZ5mkRl80-q2nOEzuG0";
     const userId = await verifyJwt(jwtToken);
     
+
     // Find current user profile
+   // console.log(userId);
     const userProfile = await UserProfile.findOne({ userId: userId });
     console.log(userProfile);
     console.log(userProfile._id.toString());
+    
 
     // Find all other profiles excluding the current user
-    let allProfiles = await UserProfile.find({
+    const allProfiles = await UserProfile.find({
       _id: { $ne: userProfile._id.toString() }
     });
 
-    // Check if there are enough profiles
     if (allProfiles.length < 2) {
       return res.status(400).json({ message: "Not enough profiles to generate pairs." });
     }
 
-    // Shuffle the profiles to randomize the order
-    allProfiles = shuffleArray(allProfiles);
-
-    // Generate all unique pairs from shuffled profiles
+    // Generate all unique pairs
     const uniquePairs = generateUniquePairs(allProfiles);
 
-    // Send the randomized profile pairs to the user
-    res.json({ message: uniquePairs });
+    const randomInt = getRandomInt(0, uniquePairs.length);
+
+    
+  
+    // Send the selected profile pair to the user
+    res.json({"message":uniquePairs});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
