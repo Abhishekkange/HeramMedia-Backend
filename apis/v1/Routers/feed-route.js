@@ -35,14 +35,14 @@ Router.post('/feed', async (req, res) => {
 
     // Find current user profile
    // console.log(userId);
-    const userProfile = await UserProfile.findOne({ userId: userId });
-    console.log(userProfile);
-    console.log(userProfile._id.toString());
+    // const userProfile = await UserProfile.findOne({ userId: userId });
+    // console.log(userProfile);
+    // console.log(userProfile._id.toString());
     
 
     // Find all other profiles excluding the current user
     const allProfiles = await UserProfile.find({
-      _id: { $ne: userProfile._id.toString() }
+      // _id: { $ne: userProfile._id.toString() }
     });
 
     if (allProfiles.length < 2) {
